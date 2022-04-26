@@ -6,7 +6,9 @@ import MaterialCommunityIcons from '@expo/vector-icons';
 // import CustomHeader from "./CustomHeader";
 
 const AccountScreen = (props) => {
-  const { navigation } = props;
+  const { navigation,route } = props;
+  const user = route.params
+  console.log("dong 10",user)
 
   //  const data = [
   //   {
@@ -46,14 +48,15 @@ const AccountScreen = (props) => {
 
   //   );
   const onProfile = () => {
-    navigation.navigate('ProfileScreen')
+    navigation.navigate('ProfileScreen',user)
   }
   const onOrder = () => {
-    navigation.navigate('OrderScreen')
+    navigation.navigate('OrderScreen',user)
   }
   const onAddress = () => {
     navigation.navigate('AddressScreen')
   }
+  
   return (
 
     <View style={styles.container}>
@@ -72,7 +75,7 @@ const AccountScreen = (props) => {
         <Image
           style={styles.img}
           source={require("../../assets/bag.png")} />
-        <Text style={styles.textlist}>Order</Text>
+        <Text style={styles.textlist}>Order History</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.cardview}
         onPress={onAddress}
@@ -82,12 +85,14 @@ const AccountScreen = (props) => {
           source={require("../../assets/Location.png")} />
         <Text style={styles.textlist}>Address</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.cardview}>
+      
+      <TouchableOpacity onPress={()=>navigation.replace("LoginScreen")} style={styles.cardview}>
         <Image
           style={styles.img}
-          source={require("../../assets/CreditCard.png")} />
-        <Text style={styles.textlist}>Payment</Text>
+          source={require("../../assets/logout.jpg")} />
+        <Text style={styles.textlist}>Log Out</Text>
       </TouchableOpacity>
+    
     </View>
   )
 }
@@ -96,12 +101,12 @@ export default AccountScreen;
 
 const styles = StyleSheet.create({
   container: {
+    marginTop:50,
     flex: 1,
     backgroundColor: 'white',
   },
   cardview: {
     flexDirection: 'row',
-    // borderWidth: 1,
     padding: 15,
     alignItems: 'center',
 
@@ -111,7 +116,7 @@ const styles = StyleSheet.create({
     height: 26,
     marginRight: 30,
     resizeMode: 'cover',
-    borderWidth: 1,
+    
 
   },
   textlist: {

@@ -15,53 +15,42 @@ import { Dimensions } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-
+import { ddmmyyyy } from '../consts/formatDate'
 const windowWidth = Dimensions.get('window').width
 const windowHeight = Dimensions.get('window').height
 
 const CardViewAvatarW = windowWidth
 const CardViewAvatarH = windowWidth * 0.25
 
-const OrderDetailScreen = () => {
+const OrderDetailScreen = (props) => {
+  const {route} = props
+  const order = route.params || {}
+  const productArr = order?.productArr || []
+ 
+  
   return (
     <ScrollView>
       <View style={styles.container}>
-        <View style={styles.cardviewAvatar}></View>
+        
         <View style={styles.cardviewChildren}>
           <Text style={styles.cardviewText}>Product</Text>
-          <View style={styles.cardviewInside1}>
-            <Image
-              style={styles.img}
-              source={require('../../assets/image/jacket/HUF.jpg')}
-            />
-            <View style={styles.textColum}>
-              <Text style={styles.textnameP}>Áo Facebook</Text>
-              <Text style={styles.textpriceP}>$500</Text>
-            </View>
-            <MaterialCommunityIcons
-              style={styles.icons}
-              name='heart-outline'
-              size={26}
-              color='black'
-            />
-          </View>
-
-          <View style={styles.cardviewInside1}>
-            <Image
-              style={styles.img}
-              source={require('../../assets/image/jacket/HUF.jpg')}
-            />
-            <View style={styles.textColum}>
-              <Text style={styles.textnameP}>Áo Facebook</Text>
-              <Text style={styles.textpriceP}>$500</Text>
-            </View>
-            <MaterialCommunityIcons
-              style={styles.icons}
-              name='heart-outline'
-              size={26}
-              color='black'
-            />
-          </View>
+          {productArr?.map(i => 
+                      <View style={styles.cardviewInside1}>
+                      <Image
+                        style={styles.img}
+                        source={{uri: i.image}}
+                      />
+                      <View style={styles.textColum}>
+                        <Text style={styles.textnameP}>{i.name}</Text>
+                        <Text style={styles.textpriceP}>{i.price}</Text>
+                      </View>
+                      <MaterialCommunityIcons
+                        style={styles.icons}
+                        name='heart-outline'
+                        size={26}
+                        color='black'
+                      />
+                    </View>)}
         </View>
         {/* ship */}
         <View style={styles.cardviewChildren}>
@@ -72,7 +61,7 @@ const OrderDetailScreen = () => {
                 Date Shipping
               </Text>
               <Text Text style={styles.textlist2}>
-                20/20/2222
+                {ddmmyyyy(order.published)}
               </Text>
             </View>
             {/* <View style={styles.cardviewInside2}>
@@ -88,7 +77,7 @@ const OrderDetailScreen = () => {
                 Address
               </Text>
               <Text Text style={styles.textlist3}>
-                205/3 Bình Trị Đông, Quận Bình Tân, TP. HCM
+              {order.address}
               </Text>
             </View>
           </View>
@@ -99,10 +88,10 @@ const OrderDetailScreen = () => {
           <View style={styles.cardviewShip}>
             <View style={styles.cardviewInside2}>
               <Text Text style={styles.textlist1}>
-                item (2)
+                {`item (${order.productQuantity})`}
               </Text>
               <Text Text style={styles.textlist2}>
-                $1000
+                {order.totalmoney}
               </Text>
             </View>
             <View style={styles.cardviewInside2}>
@@ -122,7 +111,7 @@ const OrderDetailScreen = () => {
                 Total Price
               </Text>
               <Text Text style={styles.textprice}>
-                $1040
+                {order?.totalmoney + 40}
               </Text>
             </View>
           </View>

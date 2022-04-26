@@ -70,7 +70,7 @@ const DetailsScreen = ({ navigation, route }) => {
       
   // }, []);
   // })();
-console.log(product)
+// console.log(productdata,"dong 73")
     
   
 
@@ -190,21 +190,14 @@ console.log(product)
             )}
           /> */}
           <View
-            style={{
-              width: '100%',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: 16,
-              marginTop: 32,
-            }}>
+            >
               <Image
                         source={{uri:productdata.image}}
                         style={{
 
-                            width: '100%',
-                            height: '100%',
-                            resizeMode: 'stretch',
+                            width: 300,
+                            height: 300,
+                            resizeMode: 'cover',
                         }}
                     />
               </View>

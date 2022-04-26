@@ -28,14 +28,14 @@ import DetailsScreen from './src/Components/DetailsScreen';
 import LoginScreen from './src/screen/LoginScreen';
 import RegisterScreen from './src/screen/RegisterScreen';
 import WellcomeScreen from './src/screen/WellcomeScreen';
-import { Provider } from 'react-redux';
-import store from './src/redux/store';
+import CategoryScreen from './src/Components/CategoryScreen';
+
 
 LogBox.ignoreAllLogs()
 
 export default function App() {
   return (
-    <Provider store={store}>
+ 
        <NavigationContainer >
       <Stack.Navigator>
         <Stack.Screen 
@@ -43,8 +43,8 @@ export default function App() {
         name='WellcomeSceen'  
         component={WellcomeScreen} 
         />
-        <Stack.Screen name='LoginScreen' component={LoginScreen} />
-        <Stack.Screen name='RegisterScreen' component={RegisterScreen} />
+        <Stack.Screen options={{ headerShown: false }} name='LoginScreen' component={LoginScreen} />
+        <Stack.Screen options={{ headerShown: false }} name='RegisterScreen' component={RegisterScreen} />
         <Stack.Screen
           options={{ headerShown: false }}
           component={MainScreen}
@@ -139,6 +139,19 @@ export default function App() {
 
         <Stack.Screen
           // options={{ headerShown: false }}
+          component={CategoryScreen}
+          name="CategoryScreen"
+          options={{
+            title: 'CategoryScreen',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+            headerTintColor: 'darkblue',
+          }}
+
+        />
+        <Stack.Screen
+          // options={{ headerShown: false }}
           component={ChangeNameScreen}
           name="ChangeNameScreen"
           options={{
@@ -195,7 +208,7 @@ export default function App() {
           component={OrderScreen}
           name="OrderScreen"
           options={{
-            title: 'Order',
+            title: 'Order History',
             headerTitleStyle: {
               fontWeight: 'bold',
             },
@@ -231,7 +244,7 @@ export default function App() {
       </Stack.Navigator>
       {/* <StatusBar hidden /> */}
     </NavigationContainer>
-    </Provider>
+
   );
 }
 
@@ -243,3 +256,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+//show hình trên order web,làm profile order,fetch data search,
+//chỉnh sửa phần thêm sản phẩm hk tích được available webadmin

@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View,  Button,Image,FlatList,TouchableOpacity,Pressable} from "react-native";
-import React from 'react'
+import { StyleSheet, Text, View,  Button,Image,FlatList,TouchableOpacity,Pressable,} from "react-native";
+import React,{useEffect,useState} from 'react'
 
 const data = [
     {
@@ -44,15 +44,30 @@ const data = [
   
   
 const OrderScreen = (props) => {
-    const { navigation } = props;
-    const onOrderDetail = () => {
-        navigation.navigate('OrderDetailScreen')
-      }
+    const { navigation,route } = props;
+    const user = route.params
+    const [orders, setOrders] = useState([])
 
-      const Item = ({ nameOrder,dateOrder,statusOrder,amountOrder,priceOrder }) => (
+
+    useEffect(() => {
+      const URL = `http://192.168.100.140:3000/api/order/getorderbyuserid/${user?.id}`
+
+          fetch(URL)
+            .then((response) => response.json())
+            .then((json) => setOrders(json))
+            
+            .catch((error) => console.error(error))
+            
+        }, []);
+    const onOrderDetail = (order) => {
+        navigation.navigate('OrderDetailScreen',order)
+      }
+      
+
+      const Item = ({order, nameOrder,dateOrder,productArrOrder,amountOrder,priceOrder }) => (
   
         <TouchableOpacity style={styles.cardview}
-            onPress={onOrderDetail}
+            onPress={()=>onOrderDetail(order)}
         >
         <View style={styles.cardviewT}>
             {/* <Image source={image} style={styles.img}/>     */}
@@ -61,14 +76,14 @@ const OrderScreen = (props) => {
         </View> 
         <View style={styles.cardviewB}>
             <Text Text style={styles.textlist2}>Order Status</Text>
-            <Text Text style={styles.textlist3}>{statusOrder}</Text>        
+            <Text Text style={styles.textlist3}>Success</Text>        
         </View>
         <View style={styles.cardviewB}>
-            <Text Text style={styles.textlist2}>Order Status</Text>
+            <Text Text style={styles.textlist2}>Product amount</Text>
             <Text Text style={styles.textlist3}>{amountOrder}</Text>        
         </View>
         <View style={styles.cardviewB}>
-            <Text Text style={styles.textlist2}>Order Status</Text>
+            <Text Text style={styles.textlist2}>Total Price</Text>
             <Text Text style={styles.textlist4}>{priceOrder}</Text>        
         </View>
          
@@ -77,13 +92,13 @@ const OrderScreen = (props) => {
       );
       const renderItem = ({ item }) => (
         //    <Item image={item.image} nameOrder={item.nameOrder} />     
-           <Item dateOrder={item.dateOrder} nameOrder={item.nameOrder} statusOrder={item.statusOrder} amountOrder={item.amountOrder} priceOrder={item.priceOrder}/>     
+           <Item order= {item} dateOrder={item.published} nameOrder={item.address} productArrOrder={item.productArr} amountOrder={item.productQuantity} priceOrder={item.totalmoney}/>     
     
         );  
   return (
     <View style={styles.container}>
       <FlatList
-        data={data}
+        data={orders}
         renderItem={renderItem}
         keyExtractor={item => item.id}
       />

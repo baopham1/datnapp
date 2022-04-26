@@ -15,7 +15,9 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 
 
-const MyCart = ({ navigation }) => {
+const MyCart = ({ navigation , route }) => {
+  const user = route.params
+  console.log("dong 20",user)
   const [data, setData] = useState([]);
   const [address, setAddress] = useState("2 Petre Melikishvili St.");
   
@@ -54,16 +56,16 @@ const fetchcheckoutorder = (checkOutData) =>{
         })
       }
 
-      fetch('http://10.82.155.121:3000/api/order/addOrder',requestOptions)
+      fetch('http://192.168.100.140:3000/api/order/addOrder',requestOptions)
       .then((response) => response.json())
       .then(async (json) => {   
         
         if(json?.success==true){
-          Alert.alert("checkout thanh cong")
+          Alert.alert("checkout success")
           await AsyncStorage.removeItem('cartItems');
         }
         else{
-          Alert.alert("checkout thất bại")
+          Alert.alert("checkout fail")
         }
       })
       .catch((error) => console.error(error))
@@ -104,7 +106,10 @@ try{
         productArr: data,
         address: address,
         totalmoney: totalmoney+ totalmoney/20,
-        productQuantity: data.length
+        productQuantity: data.length,
+        published:new Date(),
+        userid:user.id
+        
         // userId?????
       }
       fetchcheckoutorder(checkOutData);
@@ -360,6 +365,9 @@ try{
                 <View>
                   <TextInput
                     style={{
+                      
+                      width:300,
+                      height:40,
                       fontSize: 14,
                       color: COLOURS.black,
                       fontWeight: '500',
@@ -380,10 +388,10 @@ try{
                   </Text> */}
                 </View>
               </View>
-              <MaterialCommunityIcons
+              {/* <MaterialCommunityIcons
                 name="chevron-right"
                 style={{ fontSize: 22, color: COLOURS.black }}
-              />
+              /> */}
             </View>
           </View>
           <View
@@ -454,10 +462,10 @@ try{
                   </Text>
                 </View>
               </View>
-              <MaterialCommunityIcons
+              {/* <MaterialCommunityIcons
                 name="chevron-right"
                 style={{ fontSize: 22, color: COLOURS.black }}
-              />
+              /> */}
             </View>
           </View>
           <View

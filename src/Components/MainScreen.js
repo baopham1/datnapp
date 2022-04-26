@@ -9,6 +9,7 @@ import MyCart from "./MyCart";
 import OfferScreen from "./OfferScreen";
 import ExploreScreen from "./ExploreScreen";
 import HomeScreen from "./HomeScreen";
+import CategoryScreen from './CategoryScreen';
 
 import {COLOURS} from '../../data/database'
 import { Entypo } from '@expo/vector-icons';
@@ -18,7 +19,9 @@ import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const MainScreen = (props) => {
-  const { navigation } = props;
+  const { navigation, route } = props;
+  const {user} = route.params
+  console.log("Dong 24 MainScrene",  route.params)
   return (
 
     <Tab.Navigator
@@ -33,6 +36,7 @@ const MainScreen = (props) => {
       }}
     >
       <Tab.Screen
+            initialParams={user}
         component={HomeScreen}
         name="Home"
         options={{
@@ -43,6 +47,7 @@ const MainScreen = (props) => {
         }}
       />
       <Tab.Screen
+            initialParams={user}
         component={HomeScreen}
         name="Explore"
         options={{
@@ -53,6 +58,7 @@ const MainScreen = (props) => {
         }}
       />
       <Tab.Screen
+            initialParams={user}
         name="Search"
         component={HomeScreen}
         options={{
@@ -76,6 +82,7 @@ const MainScreen = (props) => {
         }}
       />
       <Tab.Screen
+            initialParams={user}
         component={MyCart}
         name="Cart"
         options={{
@@ -95,6 +102,7 @@ const MainScreen = (props) => {
         }}
       /> */}
       <Tab.Screen
+      initialParams={user}
         component={AccountScreen}
         name="Account"
         options={{

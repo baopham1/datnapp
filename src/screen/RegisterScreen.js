@@ -21,7 +21,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
-import { call } from "redux-saga/effects";
+
 
 
 const RegisterScreen = (props) => {
@@ -52,7 +52,7 @@ const RegisterScreen = (props) => {
           Alert.alert("Vui lòng không để trống")
         }else{
           if(password === repassword){
-            fetch('http://10.82.155.121:3000/api-index/dangky',requestOptions)
+            fetch('http://192.168.100.140:3000/api-index/dangky',requestOptions)
             .then((response) => response.json())
             .then((json) => {
               const data = json
@@ -62,7 +62,7 @@ const RegisterScreen = (props) => {
                 navigation.goBack()
               }
               else{
-                Alert.alert("Đăng ký thất bại")
+                Alert.alert("Tên đăng nhập đã có")
               }
             })
             .catch((error) => console.error(error))

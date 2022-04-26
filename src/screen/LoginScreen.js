@@ -47,19 +47,19 @@ const LoginScreen = (props) => {
           Alert.alert("Vui lòng không để trống")
         }else{
         
-            fetch('http://10.82.155.121:3000/api-index/dangnhap',requestOptions)
+            fetch('http://192.168.100.140:3000/api-index/dangnhap',requestOptions)
             .then((response) => response.json())
             .then((json) => {   
               if(json?.success==true){
                 if(json?.user){
-                  Alert.alert("Đăng nhập thành công")
-                  navigation.replace("MainScreen")
+                  
+                  navigation.navigate("MainScreen",{user:json?.user})
                 }else{
                   Alert.alert("Không tìm thấy tên đăng nhập")
                 }
               }
               else{
-                Alert.alert("Đăng nhập thất bại")
+                Alert.alert("Login Fail")
               }
             })
             .catch((error) => console.error(error))

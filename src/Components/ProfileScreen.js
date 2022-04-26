@@ -17,7 +17,9 @@ const CardViewAvatarW = windowWidth;
 const CardViewAvatarH = windowWidth * 0.25;
 
 const ProfileScreen = (props) => {
-  const { navigation } = props;
+  const { navigation,route } = props;
+  const user = route.params
+  console.log("dong 22 ",user)
   const logg = () => {
     console.log("dsadas");
   };
@@ -51,8 +53,8 @@ const ProfileScreen = (props) => {
           <Image style={styles.avatarImage} source={require("../../assets/avatarImage.jpg")} />
         </TouchableOpacity>
         <View style={styles.textAvatar}>
-          <Text style={styles.avatarName1}>Maximus Gold</Text>
-          <Text style={styles.avatarName2}>@lalas</Text>
+          <Text style={styles.avatarName1}>{user.username}</Text>
+          
         </View>
         <MaterialIcons onPress={onChangeName} style={styles.iconsNR} name="edit" size={26} color="#4D5656" />
       </View>
@@ -130,6 +132,7 @@ const ProfileScreen = (props) => {
 export default ProfileScreen
 const styles = StyleSheet.create({
   container: {
+    
     flex: 1,
     backgroundColor: '#fff',
 
@@ -146,6 +149,7 @@ const styles = StyleSheet.create({
   avatar: {
     marginHorizontal: 18,
 
+    
 
   },
   avatarImage: {
@@ -153,6 +157,7 @@ const styles = StyleSheet.create({
     width: windowWidth * 0.2,
     resizeMode: 'cover',
     borderRadius: 50,
+    
   },
   textAvatar: {
     flexDirection: 'column',

@@ -10,10 +10,9 @@ import {
     FlatList,
     SafeAreaView,
     Dimensions,
-    Image,
-    ActivityIndicator
+    Image
 } from 'react-native';
-import { COLOURS } from '../../data/database';
+import { COLOURS, Items } from '../../data/database';
 import Swiper from 'react-native-swiper';
 import { MaterialCommunityIcons, Ionicons, Entypo, FontAwesome, } from '@expo/vector-icons';
 const { width } = Dimensions.get('screen');
@@ -23,88 +22,33 @@ const HomeScreen = ({ navigation }) => {
     const [shirt, setShirt] = useState([]);
     const [jacket, setJacket] = useState([]);
 
-    const [product, setProduct] = useState([]);
-    const [selectedCategoryIndex, setSelectedCategoryindex] = useState(0);
-    const [isloading, setIsloading] = useState(false)
     //get called on screen loads
-    // useEffect(() => {
-    //     const unsubscribe = navigation.addListener('focus', () => {
-    //         getDataFromDB();
-    //     });
-
-    //     return unsubscribe;
-    // }, [navigation]);
-
-    // useEffect(()=>{
-    //     const unsubscribe = dispatch({type: actions.GET_ALL_PRODUCTS})
-    //     return unsubscribe
-    // }, [])
-
     useEffect(() => {
-    setIsloading(true)
-        fetch('http://192.168.1.221:3000/api-search/products')
-          .then((response) => response.json())
-          .then((json) => setProduct(json))
-          .catch((error) => console.error(error))
-          .finally(()=>setIsloading(false))
-          
-      }, []);
-     
-    
-      const getProductsByCategory = (category, index) =>{
-        setIsloading(true)
-        
-          setSelectedCategoryindex(index)
-        if(index!=0){
-            const url = `http://192.168.100.140:3000/api/product/getByCat/${category}`
-            
-            fetch(url)
-        .then((response) => response.json())
-        .then((json) => setProduct(json))
-        .catch((error) => console.error(error))
-        .finally(()=>setIsloading(false))
+        const unsubscribe = navigation.addListener('focus', () => {
+            getDataFromDB();
+        });
+
+        return unsubscribe;
+    }, [navigation]);
+
+    //get data from DB
+
+    const getDataFromDB = () => {
+        let shirtList = [];
+        let jacketList = [];
+        for (let index = 0; index < Items.length; index++) {
+            if (Items[index].category == 'shirt') {
+                shirtList.push(Items[index]);
+            } else if (Items[index].category == 'jacket') {
+                jacketList.push(Items[index]);
+            }
         }
-        else 
-        {
 
-            fetch('http://192.168.100.140:3000/api-search/products')
-            .then((response) => response.json())
-            .then((json) => setProduct(json))
-            .catch((error) => console.error(error))
-            .finally(()=>setIsloading(false))
-        }
-      }
-    
-
-    // const getDataFromDB = async () => {
-    
-    //         const rawResponse = await fetch('http://192.168.1.221:3000/api-search/products', {
-    //             method: 'GET',
-    //             headers: {
-    //                 'Accept': 'application/json',
-    //                 'Content-Type': 'application/json'
-    //             }
-
-    //         });
-    //         const res = await rawResponse.json();
-    //         setProduct(res)
-            
-    //     }
-    //     let shirtList = [];
-    //     let jacketList = [];
-    //     for (let index = 0; index < products.length; index++) {
-    //         if (products[index].category == 'shirt') {
-    //             shirtList.push(products[index]);
-    //         } else if (products[index].category == 'jacket') {
-    //             jacketList.push(products[index]);
-    //         }
-    //     }
-
-    //     setShirt(shirtList);
-    //     setJacket(jacketList);
-    // };
+        setShirt(shirtList);
+        setJacket(jacketList);
+    };
     const categories = ['All', 'T-Shirt', 'Jacket', 'Sweater', 'Bomber'];
-
+    const [selectedCategoryIndex, setSelectedCategoryIndex] = React.useState(0);
 
 
     const CategoryList = ({ navigation }) => {
@@ -114,7 +58,7 @@ const HomeScreen = ({ navigation }) => {
                     <TouchableOpacity
                         key={index}
                         activeOpacity={0.8}
-                        onPress={() => getProductsByCategory(item.toLowerCase(), index)}>
+                        onPress={() => setSelectedCategoryIndex(index)}>
                         <View>
                             <Text
                                 style={{
@@ -143,20 +87,17 @@ const HomeScreen = ({ navigation }) => {
         );
     };
 
-    const ProductCard = ({ item }) => {
-        
+    const ProductCard = ({ data }) => {
         return (
             <TouchableOpacity
-                onPress={() => navigation.navigate('DetailsScreen', { product: item })}
+                onPress={() => navigation.navigate('DetailsScreen', { productID: data.id })}
                 style={{
-                    width: '50%',
+                    width: '48%',
                     marginVertical: 14,
-                    alignItems:'center',
-                
                 }}>
                 <View
                     style={{
-                        width: '50%',
+                        width: '100%',
                         height: 100,
                         borderRadius: 10,
                         backgroundColor: COLOURS.backgroundLight,
@@ -165,7 +106,7 @@ const HomeScreen = ({ navigation }) => {
                         alignItems: 'center',
                         marginBottom: 8,
                     }}>
-                    {/* {data.isOff ? (
+                    {data.isOff ? (
                         <View
                             style={{
                                 position: 'absolute',
@@ -189,14 +130,13 @@ const HomeScreen = ({ navigation }) => {
                                 {data.offPercentage}%
                             </Text>
                         </View>
-                    ) : null} */}
+                    ) : null}
                     <Image
-                        source={{uri:item.image}}
+                        source={data.productImage}
                         style={{
-
-                            width: '100%',
-                            height: '100%',
-                            resizeMode: 'stretch',
+                            width: '80%',
+                            height: '80%',
+                            resizeMode: 'contain',
                         }}
                     />
                 </View>
@@ -207,10 +147,10 @@ const HomeScreen = ({ navigation }) => {
                         fontWeight: '600',
                         marginBottom: 2,
                     }}>
-                    {item.name}
+                    {data.productName}
                 </Text>
-                {item.category? (
-                    item.available ? (
+                {data.category == 'jacket' ? (
+                    data.isAvailable ? (
                         <View
                             style={{
                                 flexDirection: 'row',
@@ -251,12 +191,12 @@ const HomeScreen = ({ navigation }) => {
                                     fontSize: 12,
                                     color: COLOURS.red,
                                 }}>
-                                hết hàng
+                                Unavailable
                             </Text>
                         </View>
                     )
                 ) : null}
-                <Text>$ {item.price}</Text>
+                <Text>$ {data.productPrice}</Text>
             </TouchableOpacity>
         );
     };
@@ -277,7 +217,6 @@ const HomeScreen = ({ navigation }) => {
                         padding: 20,
                     }}>
                     <View style={style.searchInputContainer}>
-                        
                         <MaterialCommunityIcons name="magnify" color={COLOURS.grey} size={25} />
                         <TextInput placeholder="Search" />
                     </View>
@@ -319,15 +258,7 @@ const HomeScreen = ({ navigation }) => {
                 </View>
                
                 <CategoryList />
-                <FlatList 
-                data={product}
-                renderItem={ProductCard}
-                numColumns={2}
-                refreshControl={<ActivityIndicator animating={isloading} />}
-                />
-
-                
-                {/* <View
+                <View
                     style={{
                         padding: 16,
                     }}>
@@ -419,7 +350,7 @@ const HomeScreen = ({ navigation }) => {
                             return <ProductCard data={data} key={data.id} />;
                         })}
                     </View>
-                </View> */}
+                </View>
             </ScrollView>
         </View>
     );
